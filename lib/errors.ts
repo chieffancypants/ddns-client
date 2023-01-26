@@ -1,11 +1,11 @@
-type ErrorType = 'UpdateError' | 'CreateError'
+type ErrorType = 'UpdateError' | 'CreateError' | 'GetRecordsError'
 
 export class APIError<T extends ErrorType> extends Error {
     name:T
-    cause?:object
+    cause?:unknown
     message:string
 
-    constructor (name:T, message:string, cause?:object) {
+    constructor (name:T, message:string, cause?:unknown) {
         super(message)
         this.cause = cause
         this.name = name

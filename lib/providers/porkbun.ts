@@ -26,17 +26,22 @@ export class Porkbun extends BaseProvider {
         }
     }
 
-    getRecords (aRecord:string): Promise<DNSRecord[]> {
-        return this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
-            .then(recs => {
-                return recs.records.map((r:any) => ({
-                    id: r.id,
-                    name: r.name.split('.')[0],
-                    type: r.type,
-                    ip: r.content,
-                    ttl: r.ttl
-                }))
-            })
+    async getRecords (aRecord:string): Promise<DNSRecord[]> {
+        let recs
+
+        try {
+            recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
+        } catch (e) {
+            throw new APIError('GetRecordsError', 'Could not retrieve DNS records', e)
+        }
+
+        return recs.records.map((r:any) => ({
+            id: r.id,
+            name: r.name.split('.')[0],
+            type: r.type,
+            ip: r.content,
+            ttl: r.ttl
+        }))
     }
 
     async createRecord (aRecord:string, ip:string) {
