@@ -13,7 +13,6 @@ const envVariables = [
     'PROVIDER'
 ]
 
-
 ;(async function main () {
     const env = process.env
     envVariables.forEach(v => {

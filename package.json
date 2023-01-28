@@ -1,14 +1,15 @@
 {
-  "name": "porkbun-ddns",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ddns-client",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Wes Cruver <chieffancypants@gmail.com> (https://github.com/chieffancypants/)",
+  "description": "Very simple Dynamic DNS (DDNS) client for node",
+  "license": "ISC",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/index.js",
     "build": "tsc"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3"
   },

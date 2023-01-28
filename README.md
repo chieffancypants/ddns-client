@@ -16,9 +16,12 @@ While you're welcome to use, adapt, and submit pull requests, I wrote this for m
 1. Clone the repo: `git clone https://github.com/chieffancyapnts/ddns-client.git`
 1. Install dependencies: `npm install`
 1. Compile typescript: `npm run build`
+1. Create `.env` using `.env.template` as a guide
+1. Schedule in cron.  I use every 2 hours: `0 */2 * * * /path/to/ddns/scripts/cron-ddns.sh`
 
 ## Usage:
-Rename `.env.template` to `.env` and change it to reflect the details of each device this runs on. For example, if you want to point to a new device that monitors your beer hydrometer levels:
+Rename `.env.template` to `.env` and change it to reflect the details of each device this runs on. For example, if you want to point to a new device that monitors your beer hydrometer levels.  `HOSTNAME` is the `A` record created or updated.  In the following example, the DDNS entry pointing to your dynamic IP will be `beer-fermentation.wescruver.com`
+
 ```js
 API_KEY="pk1_..."
 API_SECRET="sk1_..."
