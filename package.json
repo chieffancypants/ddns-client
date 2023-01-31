@@ -8,7 +8,12 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
-    "build": "tsc"
+    "clean": "rm -rf dist/ && rm -rf ncc_out/ && rm -f ddns-client.zip",
+    "build": "tsc",
+    "lint": "npx eslint",
+    "package": "npm run clean && npm run lint && npm run ncc && npm run package:zip",
+    "ncc": "npm exec ncc -- build index.ts -o ncc_out --source-map --license licenses.txt",
+    "package:zip": "zip -r -j ddns-client.zip ncc_out/* README.md LICENSE"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
@@ -18,6 +23,7 @@
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
+    "@vercel/ncc": "^0.36.1",
     "eslint": "^8.32.0",
     "typescript": "^4.9.4"
   }
