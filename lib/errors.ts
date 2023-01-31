@@ -1,18 +1,19 @@
-type ErrorType = 'UpdateError' | 'CreateError' | 'GetRecordsError'
+import log from './log'
 
-export class APIError<T extends ErrorType> extends Error {
-    name:T
-    cause?:unknown
-    message:string
-
-    constructor (name:T, message:string, cause?:unknown) {
+export class ProgramError extends Error {
+    constructor (public message:string, public cause?:unknown) {
         super(message)
-        this.cause = cause
-        this.name = name
-        this.message = message
 
         if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, APIError)
+            Error.captureStackTrace(this, ProgramError)
         }
+
+        log.error(this)
+    }
+}
+
+export class APIError extends ProgramError {
+    constructor (public message:string, public cause?:unknown, public context?:object) {
+        super(message, cause)
     }
 }

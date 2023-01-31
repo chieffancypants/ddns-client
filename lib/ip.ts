@@ -1,12 +1,24 @@
+import { APIError } from './errors'
+import log from './log'
+
 let ip = ''
 
-export default function getIP () {
+export default async function getIP () {
+    log.info('Getting IP address...')
     if (ip) return Promise.resolve(ip)
 
-    return fetch('https://api.ipify.org?format=json')
-        .then(r => r.json())
-        .then(r => {
-            ip = r.ip
-            return ip
-        })
+    let resp
+    try {
+        resp = await fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(r => {
+                ip = r.ip
+                return ip
+            })
+    } catch (e) {
+        throw new APIError('Could not get IP address', e)
+    }
+
+    return resp
+
 }

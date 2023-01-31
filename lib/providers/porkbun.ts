@@ -32,7 +32,7 @@ export class Porkbun extends BaseProvider {
         try {
             recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
         } catch (e) {
-            throw new APIError('GetRecordsError', 'Could not retrieve DNS records', e)
+            throw new APIError('Could not retrieve DNS records', e, recs)
         }
 
         return recs.records.map((r:any) => ({
@@ -61,7 +61,7 @@ export class Porkbun extends BaseProvider {
                 url,
                 body,
             }
-            throw new APIError('CreateError', `Could not create A record "${aRecord}" on host "${this.domain}`, apiMessage)
+            throw new APIError(`Could not create A record "${aRecord}" on host "${this.domain}`, undefined, apiMessage)
         }
         return res
     }
@@ -78,7 +78,7 @@ export class Porkbun extends BaseProvider {
                 url,
                 body
             }
-            throw new APIError('UpdateError', `Could not update A record "${aRecord}" on host "${this.domain}`, apiMessage)
+            throw new APIError(`Could not update A record "${aRecord}" on host "${this.domain}`, undefined, apiMessage)
         }
         return res
     }
@@ -101,7 +101,14 @@ export class Porkbun extends BaseProvider {
                 ...data
             })
         }
+
         return await fetch(`${this.endpoint}/${action}`, postData)
+            .then(r => {
+                const ctx = { statusCode: r.status, statusMessage: r.statusText }
+                if (!r.ok) throw new APIError('HTTP Error Status', undefined, ctx)
+                return r
+            })
             .then(r => r.json())
+
     }
 }

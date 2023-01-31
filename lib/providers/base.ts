@@ -24,7 +24,7 @@ export abstract class BaseProvider {
     }
 
     abstract getRecords (resource:string): Promise<DNSRecord[]>
-    abstract updateRecord (resource:string, ip:string): Promise<any> | APIError<'UpdateError'>
-    abstract createRecord (resource:string, ip:string): Promise<any> | APIError<'CreateError'>
+    abstract updateRecord (resource:string, ip:string): Promise<any> | APIError
+    abstract createRecord (resource:string, ip:string): Promise<any> | APIError
 
 }

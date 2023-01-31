@@ -11,7 +11,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "pino": "^8.8.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
