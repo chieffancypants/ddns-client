@@ -8,12 +8,12 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
-    "clean": "rm -rf dist/ && rm -rf ncc_out/ && rm -f ddns-client.zip",
+    "clean": "rm -rf dist/ && rm -rf build/ && rm -f ddns-client.zip",
     "build": "tsc",
     "lint": "npx eslint",
     "package": "npm run clean && npm run lint && npm run ncc && npm run package:zip",
-    "ncc": "npm exec ncc -- build index.ts -o ncc_out --source-map --license licenses.txt",
-    "package:zip": "zip -r -j ddns-client.zip ncc_out/* README.md LICENSE"
+    "ncc": "npm exec ncc -- build index.ts -o build -a -s --license licenses.txt",
+    "package:zip": "zip -r ddns-client.zip build/* README.md LICENSE scripts"
   },
   "dependencies": {
     "dotenv": "^16.0.3",

@@ -9,4 +9,4 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # nvm use node
 
 cd "$DIR/../"
-node dist/index.js
+node build/index.js
