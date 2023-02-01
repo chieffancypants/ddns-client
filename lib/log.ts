@@ -1,3 +1,4 @@
+import path from 'path'
 import pino from 'pino'
 
 /**
@@ -7,13 +8,13 @@ import pino from 'pino'
  * This makes it simple to log to the root directory regardless of how the app is run by removing
  * the last directory from the path
  */
-const destination = `${__dirname}/../ddns-client.log`
+const destination = path.resolve(`${__dirname}/../ddns-client.log`)
 
 const transport = pino.transport({
     targets: [{
         target: 'pino/file',
         level: process.env.LOG_LEVEL || 'info',
-        options: { destination }
+        options: { destination: destination }
     }]
 })
 

@@ -12,7 +12,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "outDir": "./dist"
+    "outDir": "./build"
   },
   "include": [
     "**/*.ts",

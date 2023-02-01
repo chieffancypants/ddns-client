@@ -5,10 +5,10 @@
   "author": "Wes Cruver <chieffancypants@gmail.com> (https://github.com/chieffancypants/)",
   "description": "Very simple Dynamic DNS (DDNS) client for node",
   "license": "ISC",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
-    "clean": "rm -rf dist/ && rm -rf build/ && rm -f ddns-client.zip",
+    "start": "node ./build/index.js",
+    "clean": "rm -rf build/ && rm -rf build/ && rm -f ddns-client.zip",
     "build": "tsc",
     "lint": "npx eslint",
     "package": "npm run clean && npm run lint && npm run ncc && npm run package:zip",

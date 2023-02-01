@@ -10,7 +10,7 @@ I recently switched to Porkbun for my domain names, so I wrote this for now, wit
 
 
 # Important Note!
-While you're welcome to use, adapt, and submit pull requests, I wrote this for myself.  Don't let the beautiful README fool you -- I love writing detailed docs because I have scripts that have been chugging along completely untouched and running strong since 1998, and know that reading code you wrote 25 years ago as a teenager is just as difficult as understanding why JNCO was a thing.
+While you're welcome to use, adapt, and submit pull requests, I wrote this for myself.  Don't let the beautiful README fool you -- I love writing detailed docs because I have scripts that have been chugging along untouched since 1998, and therefore have personal experience with how reading code you wrote 25 years ago as a teenager is just as difficult as understanding why JNCO was a thing.
 
 ## Installation from source:
 1. Clone the repo: `git clone git@github.com:chieffancypants/ddns-client.git`
@@ -18,6 +18,15 @@ While you're welcome to use, adapt, and submit pull requests, I wrote this for m
 1. Compile typescript: `npm run build`
 1. Create `.env` using `.env.template` as a guide
 1. Schedule in cron.  I use every 2 hours: `0 */2 * * * /path/to/ddns-client/scripts/cron-ddns.sh`
+
+## Installation from pre-built release:
+1. Download the `ddns-client.zip` from the [latest release](https://github.com/chieffancypants/ddns-client/releases) to your device
+1. `unzip dns-client.zip -d ./dns-client`
+1. Create `.env` using `.env.template` as a guide
+1. Schedule in cron.  I use every 2 hours: `0 */2 * * * /path/to/ddns-client/scripts/cron-ddns.sh`
+
+## Upgrading:
+A provided script makes this pretty easy: `$ scripts/update.sh`
 
 ## Usage:
 Rename `.env.template` to `.env` and change it to reflect the details of each device this runs on. For example, if you want to point to a new device that monitors your beer hydrometer levels.  `HOSTNAME` is the `A` record created or updated.  In the following example, the DDNS entry pointing to your dynamic IP will be `beer-fermentation.wescruver.com`

@@ -15,5 +15,6 @@ export class ProgramError extends Error {
 export class APIError extends ProgramError {
     constructor (public message:string, public cause?:unknown, public context?:object) {
         super(message, cause)
+        log.error(this)
     }
 }
