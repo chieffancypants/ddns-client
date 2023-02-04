@@ -59,7 +59,7 @@ async function main () {
 
 }
 
-// Catch any errors thrown and log:
+// Catch any errors thrown and log them:
 main().catch(e => {
     log.error(e)
     throw e

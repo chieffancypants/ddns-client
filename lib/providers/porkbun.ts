@@ -103,7 +103,7 @@ export class Porkbun extends BaseProvider {
             })
         }
 
-        return await fetch(`${this.endpoint}/d${action}`, postData)
+        return await fetch(`${this.endpoint}/${action}`, postData)
             .then(async r => {
                 if (!r.ok) {
                     const context = {
