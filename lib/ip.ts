@@ -15,8 +15,8 @@ export default async function getIP () {
                 ip = r.ip
                 return ip
             })
-    } catch (e) {
-        throw new APIError('Could not get IP address', e)
+    } catch (cause) {
+        throw new APIError('Could not get IP address', { cause })
     }
 
     return resp

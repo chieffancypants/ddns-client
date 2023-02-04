@@ -23,6 +23,15 @@ export abstract class BaseProvider {
         this.hostname = hostname
     }
 
+    headersToObject (res: Response) {
+        const headers = res.headers
+        const headersObject: { [key: string]: string } = {}
+        headers.forEach((value, key) => {
+            headersObject[key] = value
+        })
+        return headersObject
+    }
+
     abstract getRecords (resource:string): Promise<DNSRecord[]>
     abstract updateRecord (resource:string, ip:string): Promise<any> | APIError
     abstract createRecord (resource:string, ip:string): Promise<any> | APIError

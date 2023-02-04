@@ -16,7 +16,7 @@ const envVariables = [
 ]
 
 
-;(async function main () {
+async function main () {
     log.info('Starting DDNS client...')
     const env = process.env
     envVariables.forEach(v => {
@@ -57,4 +57,10 @@ const envVariables = [
     await provider.updateRecord(env.HOSTNAME!, ip)
     log.info(`Updated record from ${record.ip} to ${ip}`)
 
-})()
+}
+
+// Catch any errors thrown and log:
+main().catch(e => {
+    log.error(e)
+    throw e
+})

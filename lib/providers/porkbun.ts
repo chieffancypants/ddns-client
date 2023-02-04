@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv'
 
-import { APIError } from '../errors'
+import { APIError, HTTPError } from '../errors'
 import { BaseProvider } from './base'
 
 import type { DNSRecord, Headers } from './base'
@@ -29,10 +29,11 @@ export class Porkbun extends BaseProvider {
     async getRecords (aRecord:string): Promise<DNSRecord[]> {
         let recs
 
+        // const recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
         try {
             recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
-        } catch (e) {
-            throw new APIError('Could not retrieve DNS records', e, recs)
+        } catch (cause) {
+            throw new APIError('Could not retrieve DNS records', { cause, context: recs })
         }
 
         return recs.records.map((r:any) => ({
@@ -61,7 +62,7 @@ export class Porkbun extends BaseProvider {
                 url,
                 body,
             }
-            throw new APIError(`Could not create A record "${aRecord}" on host "${this.domain}`, undefined, apiMessage)
+            throw new APIError(`Could not create A record "${aRecord}" on host "${this.domain}`, { context: apiMessage })
         }
         return res
     }
@@ -78,7 +79,7 @@ export class Porkbun extends BaseProvider {
                 url,
                 body
             }
-            throw new APIError(`Could not update A record "${aRecord}" on host "${this.domain}`, undefined, apiMessage)
+            throw new APIError(`Could not update A record "${aRecord}" on host "${this.domain}`, { context: apiMessage })
         }
         return res
     }
@@ -102,10 +103,18 @@ export class Porkbun extends BaseProvider {
             })
         }
 
-        return await fetch(`${this.endpoint}/${action}`, postData)
-            .then(r => {
-                const ctx = { statusCode: r.status, statusMessage: r.statusText }
-                if (!r.ok) throw new APIError('HTTP Error Status', undefined, ctx)
+        return await fetch(`${this.endpoint}/d${action}`, postData)
+            .then(async r => {
+                if (!r.ok) {
+                    const context = {
+                        url: r.url,
+                        statusCode: r.status,
+                        statusMessage: r.statusText,
+                        responseHeaders: this.headersToObject(r),
+                        body: await r.text()
+                    }
+                    throw new HTTPError('HTTP Error Status', { context })
+                }
                 return r
             })
             .then(r => r.json())
