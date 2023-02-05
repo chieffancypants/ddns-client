@@ -18,6 +18,7 @@ const envVariables = [
 
 async function main () {
     log.info('Starting DDNS client...')
+
     const env = process.env
     envVariables.forEach(v => {
         if (!env[v]) throw new ProgramError(`Missing environment variable: ${v}`)
@@ -25,7 +26,11 @@ async function main () {
 
     let provider
     if (env.PROVIDER!.toLowerCase() === 'porkbun') {
-        provider = new Porkbun(env.DOMAIN!, env.HOSTNAME!)
+        provider = new Porkbun({
+            domain: env.DOMAIN!,
+            apiKey: env.API_KEY!,
+            apiSecret: env.API_SECRET!
+        })
     } else {
         throw new ProgramError('Invalid provider specified')
     }

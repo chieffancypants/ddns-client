@@ -1,13 +1,9 @@
-import * as dotenv from 'dotenv'
-
-import { APIError, HTTPError } from '../errors'
 import { BaseProvider } from './base'
+import { HTTPError } from '../errors'
 
-import type { DNSRecord, Headers } from './base'
+import type { DNSRecord, Headers, ProviderOpts } from './base'
 
 const ENDPOINT = 'https://porkbun.com/api/json/v3'
-dotenv.config()
-
 
 /**
  * Create DDNS `A` record using Porkbun's API. They have a super weird API because for some reason
@@ -18,8 +14,8 @@ dotenv.config()
 export class Porkbun extends BaseProvider {
     headers: Headers
 
-    constructor (domain: string, hostname: string) {
-        super(ENDPOINT, domain, hostname)
+    constructor (opts:Omit<ProviderOpts, 'endpoint'>) {
+        super({ endpoint: ENDPOINT, ...opts })
         this.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -27,15 +23,7 @@ export class Porkbun extends BaseProvider {
     }
 
     async getRecords (aRecord:string): Promise<DNSRecord[]> {
-        let recs
-
-        // const recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
-        try {
-            recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
-        } catch (cause) {
-            throw new APIError('Could not retrieve DNS records', { cause, context: recs })
-        }
-
+        const recs = await this.get(`dns/retrieveByNameType/${this.domain}/a/${aRecord}`)
         return recs.records.map((r:any) => ({
             id: r.id,
             name: r.name.split('.')[0],
@@ -53,35 +41,13 @@ export class Porkbun extends BaseProvider {
             content: ip,
             ttl: 600
         }
-        const res = await this.post(url, body)
-        if (res.status !== 'SUCCESS') {
-            const apiMessage = {
-                apiResponse: res.message,
-                record: aRecord,
-                domain: this.domain,
-                url,
-                body,
-            }
-            throw new APIError(`Could not create A record "${aRecord}" on host "${this.domain}`, { context: apiMessage })
-        }
-        return res
+        return this.post(url, body)
     }
 
     async updateRecord (aRecord:string, ip:string) {
         const url = `dns/editByNameType/${this.domain}/a/${aRecord}`
         const body = { content: ip }
-        const res = await this.post(url, body)
-        if (res.status !== 'SUCCESS') {
-            const apiMessage = {
-                apiResponse: res.message,
-                record: aRecord,
-                domain: this.domain,
-                url,
-                body
-            }
-            throw new APIError(`Could not update A record "${aRecord}" on host "${this.domain}`, { context: apiMessage })
-        }
-        return res
+        return await this.post(url, body)
     }
 
     get (resource:string) {
@@ -97,8 +63,8 @@ export class Porkbun extends BaseProvider {
             method: 'POST',
             headers: this.headers,
             body: JSON.stringify({
-                apikey: process.env.API_KEY,
-                secretapikey: process.env.API_SECRET,
+                apikey: this.apiKey,
+                secretapikey: this.apiSecret,
                 ...data
             })
         }
