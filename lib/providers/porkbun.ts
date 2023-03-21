@@ -5,6 +5,10 @@ import type { DNSRecord, Headers, ProviderOpts } from './base'
 
 const ENDPOINT = 'https://porkbun.com/api/json/v3'
 
+type DNSRecordUpdateResponse = {
+    status: 'SUCCESS' | 'ERROR',
+}
+
 /**
  * Create DDNS `A` record using Porkbun's API. They have a super weird API because for some reason
  * they require authentication params be POSTed in the body instead of as a header. So even if
@@ -44,7 +48,7 @@ export class Porkbun extends BaseProvider {
         return this.post(url, body)
     }
 
-    async updateRecord (aRecord:string, ip:string) {
+    async updateRecord (aRecord:string, ip:string): Promise<DNSRecordUpdateResponse> {
         const url = `dns/editByNameType/${this.domain}/a/${aRecord}`
         const body = { content: ip }
         return await this.post(url, body)

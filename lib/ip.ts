@@ -3,6 +3,10 @@ import log from './log'
 
 let ip = ''
 
+interface IpifyResponse {
+    ip: string;
+}
+
 export default async function getIP () {
     log.info('Getting IP address...')
     if (ip) return Promise.resolve(ip)
@@ -10,8 +14,8 @@ export default async function getIP () {
     let resp
     try {
         resp = await fetch('https://api.ipify.org?format=json')
-            .then(r => r.json())
-            .then(r => {
+            .then((r: Response) => r.json())
+            .then((r: IpifyResponse) => {
                 ip = r.ip
                 return ip
             })

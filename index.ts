@@ -54,18 +54,19 @@ async function main () {
 
     // if the IP address is the same, do nothing
     if (record.ip === ip) {
-        log.info('IP address is the same, no update needed')
+        log.info(`IP address is the same (${ip}), no update needed`)
         return
     }
 
     // update the record:
     await provider.updateRecord(env.HOSTNAME!, ip)
-    log.info(`Updated record from ${record.ip} to ${ip}`)
-
+    log.info({ previousIp: record.ip, currentIp:ip }, 'Updated A record to latest IP address')
 }
 
 // Catch any errors thrown and log them:
-main().catch(e => {
-    log.error(e)
+try {
+    main()
+} catch (e) {
+    log.fatal(e)
     throw e
-})
+}
