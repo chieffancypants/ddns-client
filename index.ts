@@ -6,7 +6,7 @@ import { Porkbun } from './lib/providers/porkbun'
 import { ProgramError } from './lib/errors'
 
 dotenv.config()
-
+log.level = process.env.LOG_LEVEL || 'info'
 const envVariables = [
     'DOMAIN',
     'HOSTNAME',
@@ -14,7 +14,6 @@ const envVariables = [
     'API_SECRET',
     'PROVIDER'
 ]
-
 
 async function main () {
     log.info('Starting DDNS client...')
@@ -41,8 +40,11 @@ async function main () {
         provider.getRecords(env.HOSTNAME!)
     ])
 
+    log.debug({ip, dnsRecords}, 'Recieved IP address and A record')
+
     // if record doesn't exist, create it:
     if (dnsRecords.length === 0) {
+        log.debug('DNS A record doesn\'t exist.  Creating one now...')
         await provider.createRecord(env.HOSTNAME!, ip)
         log.info(`Created "A" record for "${env.HOSTNAME}" at ${ip}`)
         return
@@ -59,14 +61,15 @@ async function main () {
     }
 
     // update the record:
+    log.debug('IP address changed since last check.  Updating...')
     await provider.updateRecord(env.HOSTNAME!, ip)
-    log.info({ previousIp: record.ip, currentIp:ip }, 'Updated A record to latest IP address')
+    log.info({ current:ip, previous: record.ip,  }, 'Updated A record to latest IP address')
 }
 
 // Catch any errors thrown and log them:
-try {
-    main()
-} catch (e) {
+main().then(() => {
+    log.debug('DDNS client completed successfully')
+}).catch(e => {
     log.fatal(e)
     throw e
-}
+})

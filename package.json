@@ -11,7 +11,7 @@
     "lint": "npx eslint",
     "ncc": "npm exec ncc -- build index.ts -o build -a -s --license licenses.txt",
     "zip": "zip -r ddns-client.zip build/* README.md LICENSE scripts",
-    "prepackage": "npm run clean && npm run lint && npx tsc --noEmit",
+    "prepackage": "npm run lint && npx tsc --noEmit && npm run test && npm run clean",
     "package": "npm run ncc && npm run zip",
     "test": "jest",
     "test:watch": "jest --watch"

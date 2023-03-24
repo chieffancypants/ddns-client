@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+#
+# Run this file from the project's root directory (not scripts)
+#
+
+# TODO: Make sure this script can be run from the scripts directory
+
 BASEURL="https://github.com/chieffancypants/ddns-client"
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 LATEST_TAG=`curl -si $BASEURL/releases/latest | sed -En 's/^location:.*tag\/(.*)\r/\1/p'`

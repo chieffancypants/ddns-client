@@ -17,7 +17,7 @@ const logger = pino({
     transport: {
         targets: [{
             target: 'pino/file',
-            level: process.env.LOG_LEVEL || 'info',
+            level: 'debug',
             options: { destination: destination }
         }]
     },
